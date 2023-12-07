@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +19,10 @@ namespace day_7
                 hands[i] = hands[i].Replace('A', 'Z');
                 hands[i] = hands[i].Replace('K', 'Y');
                 hands[i] = hands[i].Replace('Q', 'X');
-                hands[i] = hands[i].Replace('J', 'W');
+                if (!part2)
+                {
+                    hands[i] = hands[i].Replace('J', 'W');
+                }
                 int currentStrength = 0;
                 char match = 'n';
                 for (int j = 0; j < hands[i].Length; j++)
@@ -63,7 +66,7 @@ namespace day_7
                     }
                     else if (matches == 3)
                     {
-                        if (currentStrength == 2)
+                        if (currentStrength == 1)
                         {
                             strengths.Add(4);
                             break;
@@ -123,7 +126,8 @@ namespace day_7
                     if (strengths[i] == j)
                     {
                         equalStrengthIndex.Add(i);
-                        //Console.WriteLine(strengths[i]);
+                        Console.Write(strengths[i] + " ");
+                        Console.WriteLine(hands[i]);
                         sepRanks[j].Add(strengths[i]);
                     }
                 }
@@ -138,12 +142,6 @@ namespace day_7
                     }
                 }
             }
-
-
-
-
-
-
             return ranks;
         }
         static int lessThanHands = 0;
@@ -206,6 +204,7 @@ namespace day_7
             //Console.WriteLine("ranks[0] " + ranks[0]);
             return ranks;
         }
+        static bool part2 = true;
         static void Main(string[] args)
         {
             long total = 0;
