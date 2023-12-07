@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Security.AccessControl;
 using System.IO;
 using System.Data.SqlTypes;
+using System.Text.RegularExpressions;
 
 namespace day_7
 {
@@ -23,11 +24,31 @@ namespace day_7
                 {
                     hands[i] = hands[i].Replace('J', 'W');
                 }
+                else
+                {
+                    hands[i] = hands[i].Replace('J', '1');
+                }
                 int jCount = 0;
                 int currentStrength = 0;
                 char match = 'n';
+                
+                for (int k = 0; k < hands[i].Length; k++)
+                {
+                    if (hands[i][k] == '1')
+                    {
+                        jCount++;
+                    }
+                    //Console.WriteLine(hands[i][j]);
+                }
                 for (int j = 0; j < hands[i].Length; j++)
                 {
+                    
+                    //Console.WriteLine(jCount + " <----");
+                    //if (hands[i][j] == 'J')
+                    //{
+                    //    jCount++;
+                    //}
+
                     int matches = 0;
                     if (hands[i][j] != match)
                     {
@@ -35,10 +56,10 @@ namespace day_7
                         {
                             if (hands[i][j] == hands[i][k])
                             {
-                                if (hands[i][j] == 'J')
-                                {
-                                    jCount++;
-                                }
+                                //if (hands[i][k] == 'J')
+                                //{
+                                //    jCount++;
+                                //}
                                 matches++;
                                 //Console.WriteLine(hands[i][j]);
                                 if (matches > 1)
@@ -104,8 +125,11 @@ namespace day_7
                         break;
                     }
                 }
+                //Console.WriteLine("---");
+                
                 if (strengths[strengths.Count - 1] == 6 || jCount == 0)
                 {
+                    //Console.WriteLine(hands[i] + " : " + jCount + " : " + strengths[strengths.Count - 1]);
                     continue;
                 }
                 if (jCount == 1)
@@ -116,12 +140,25 @@ namespace day_7
                     }
                     else
                     {
+                        //Console.WriteLine(strengths[strengths.Count - 1]);
                         strengths[strengths.Count - 1] += 2;
+                        //Console.WriteLine(strengths[strengths.Count - 1]);
+                        //Console.WriteLine("---");
                     }
                 }
                 else if (jCount == 2)
                 {
-                    strengths[strengths.Count - 1] += 2;
+                    if (strengths[strengths.Count - 1] == 2)
+                    {
+                        
+                        strengths[strengths.Count - 1] += 3;
+                        //Console.WriteLine(strengths[strengths.Count - 1]);
+                        //Console.WriteLine("----");
+                    }
+                    else
+                    {
+                        strengths[strengths.Count - 1] += 2;
+                    }
                 }
                 else if (jCount == 3)
                 {
@@ -131,14 +168,14 @@ namespace day_7
                 {
                     strengths[strengths.Count - 1]++;
                 }
-                
+                //Console.WriteLine(hands[i] + " : " + jCount + " : " + strengths[strengths.Count - 1]);
             }
             return OrderRank(hands, strengths);
         }
         static List<int> OrderRank(List<string> hands, List<int> strengths)
         {
-            
-            
+
+
             List<int> ranks = new List<int>();
             for (int i = 0; i < hands.Count; i++)
             {
@@ -149,7 +186,7 @@ namespace day_7
             {
                 sepRanks.Add(new List<int>());
             }
-            
+
             for (int j = 6; j > -1; j--)
             {
                 List<int> equalStrengthIndex = new List<int>();
@@ -159,14 +196,14 @@ namespace day_7
                     if (strengths[i] == j)
                     {
                         equalStrengthIndex.Add(i);
-                        Console.Write(strengths[i] + " ");
-                        Console.WriteLine(hands[i]);
+                        //Console.Write(strengths[i] + " ");
+                        //Console.WriteLine(hands[i]);
                         sepRanks[j].Add(strengths[i]);
                     }
                 }
                 if (sepRanks[j].Count > 0)
                 {
-                    Console.WriteLine("---");
+                    //Console.WriteLine("---");
                     sepRanks[j] = Ordering(hands, equalStrengthIndex, sepRanks[j]);
 
                     for (int i = 0; i < equalStrengthIndex.Count; i++)
@@ -216,12 +253,12 @@ namespace day_7
                 {
                     if (ranks[j] == i && !checks[j])
                     {
-                        //Console.WriteLine("i: " + i);
-                        //Console.WriteLine("ranks[j]B " + ranks[j]);
+                        Console.WriteLine("i: " + i);
+                        Console.WriteLine("ranks[j]B " + ranks[j]);
                         ranks[j] = totalHands;
                         checks[j] = true;
-                        //Console.WriteLine("totalHands " + totalHands);
-                        //Console.WriteLine("ranks[j] " + ranks[j]);
+                        Console.WriteLine("totalHands " + totalHands);
+                        Console.WriteLine("ranks[j] " + ranks[j]);
 
                         totalHands--;
                         lessThanHands++;
@@ -242,7 +279,7 @@ namespace day_7
         {
             long total = 0;
             List<string> hands = new List<string>();
-            using (StreamReader sr = new StreamReader("input.txt"))
+            using (StreamReader sr = new StreamReader("Input.txt"))
             {
                 string line;
                 List<int> ranks = new List<int>();
