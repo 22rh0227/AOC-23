@@ -23,6 +23,7 @@ namespace day_7
                 {
                     hands[i] = hands[i].Replace('J', 'W');
                 }
+                int jCount = 0;
                 int currentStrength = 0;
                 char match = 'n';
                 for (int j = 0; j < hands[i].Length; j++)
@@ -34,6 +35,10 @@ namespace day_7
                         {
                             if (hands[i][j] == hands[i][k])
                             {
+                                if (hands[i][j] == 'J')
+                                {
+                                    jCount++;
+                                }
                                 matches++;
                                 //Console.WriteLine(hands[i][j]);
                                 if (matches > 1)
@@ -99,6 +104,34 @@ namespace day_7
                         break;
                     }
                 }
+                if (strengths[strengths.Count - 1] == 6 || jCount == 0)
+                {
+                    continue;
+                }
+                if (jCount == 1)
+                {
+                    if (strengths[strengths.Count - 1] == 0 || strengths[strengths.Count - 1] == 5)
+                    {
+                        strengths[strengths.Count - 1]++;
+                    }
+                    else
+                    {
+                        strengths[strengths.Count - 1] += 2;
+                    }
+                }
+                else if (jCount == 2)
+                {
+                    strengths[strengths.Count - 1] += 2;
+                }
+                else if (jCount == 3)
+                {
+                    strengths[strengths.Count - 1] += 2;
+                }
+                else if (jCount == 4)
+                {
+                    strengths[strengths.Count - 1]++;
+                }
+                
             }
             return OrderRank(hands, strengths);
         }
