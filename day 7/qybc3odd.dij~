@@ -1,0 +1,196 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Security.AccessControl;
+using System.IO;
+using System.Data.SqlTypes;
+
+namespace day_7
+{
+    internal class Program
+    {
+        static List<int> Ranks(List<string> hands)
+        {
+            List<int> strengths = new List<int>();
+            for (int i = 0; i < hands.Count; i++)
+            {
+                hands[i].Replace('A', 'Z');
+                hands[i].Replace('K', 'Y');
+                hands[i].Replace('Q', 'X');
+                hands[i].Replace('J', 'W');
+                int currentStrength = 0;
+                for (int j = 0; j < hands[i].Length; j++)
+                {
+                    int matches = 0;
+                    
+                    for (int k = 0; k < hands[i].Length; k++)
+                    {
+                        if (hands[i][j] == hands[i][k])
+                        {
+                            matches++;
+                            Console.WriteLine(hands[i][j]);
+                        }
+                    }
+                    //Console.ReadKey();
+                    if (matches == 5)
+                    {
+                        strengths.Add(6);
+                        break;
+                    }
+                    else if (matches == 4)
+                    {
+                        strengths.Add(5);
+                        break;
+                    }
+                    else if (matches == 3)
+                    {
+                        if (currentStrength == 2)
+                        {
+                            strengths.Add(4);
+                            break;
+                        }
+                        currentStrength = 3;
+                        Console.ReadKey();
+                    }
+                    else if (matches == 2)
+                    {
+                        if (currentStrength == 3)
+                        {
+                            strengths.Add(4);
+                            break;
+                        }
+                        else if (currentStrength == 1)
+                        {
+                            strengths.Add(2);
+                            break;
+                        }
+                        currentStrength = 1;
+                    }
+                    else if (currentStrength == 3)
+                    {
+                        strengths.Add(3);
+                        break;
+                    }
+                    else if (currentStrength == 1 && j == hands[i].Length - 2)
+                    {
+                        strengths.Add(1);
+                        break;
+                    }
+                    if (j == hands[i].Length - 1)
+                    {
+                        strengths.Add(0);
+                        break;
+                    }
+                }
+            }
+            return OrderRank(hands, strengths);
+        }
+        static List<int> OrderRank(List<string> hands, List<int> strengths)
+        {
+            
+            
+            List<int> ranks = new List<int>();
+            for (int i = 0; i < hands.Count; i++)
+            {
+                ranks.Add(0);
+            }
+            List<List<int>> sepRanks = new List<List<int>>();
+            for (int i = 0; i < 7; i++)
+            {
+                sepRanks.Add(new List<int>());
+            }
+            
+            for (int j = 6; j > -1; j--)
+            {
+                List<int> equalStrengthIndex = new List<int>();
+                for (int i = 0; i < strengths.Count; i++)
+                {
+                    if (strengths[i] == j)
+                    {
+                        equalStrengthIndex.Add(i);
+                        Console.WriteLine(strengths[i]);
+                        sepRanks[j].Add(strengths[i]);
+                    }
+                }
+                sepRanks[j] = OrderedOredering(hands, equalStrengthIndex, sepRanks[j]);
+                for (int i = 0; i < equalStrengthIndex.Count; i++)
+                {
+                    ranks[equalStrengthIndex[i]] = sepRanks[j][i];
+                }
+            }
+
+
+
+
+
+
+            return ranks;
+        }
+        static int lessThanHands = 0;
+        static List<int> OrderedOredering(List<string> hands, List<int> equalStrengthIndex, List<int> ranks)
+        {
+            List<string> handsOrdered = new List<string>();
+            for (int i = 0; i < hands.Count; i++)
+            {
+                handsOrdered.Add(hands[i]);
+            }
+            handsOrdered.Sort();
+            //handsOrdered.Reverse();
+            int highestRank = 0;
+            for (int i = 0; i < equalStrengthIndex.Count; i++)
+            {
+                for (int j = 0; j < handsOrdered.Count; j++)
+                {
+                    if (hands[equalStrengthIndex[i]] == handsOrdered[j])
+                    {
+                        ranks[i] = j;
+                        highestRank++;
+                    }
+
+                }
+
+            }
+            int totalHands = hands.Count - lessThanHands;
+            for (int j = 0; j < ranks.Count; j++)
+            {
+                for (int i = hands.Count; i > 0; i--)
+                {
+                    if (ranks[j] == i)
+                    {
+                        ranks[j] = totalHands;
+                        totalHands--;
+                        lessThanHands++;
+                    }
+                }
+            }
+            return ranks;
+        }
+        static void Main(string[] args)
+        {
+            int total = 0;
+            List<string> hands = new List<string>();
+            using (StreamReader sr = new StreamReader("test.txt"))
+            {
+                string line;
+                List<int> ranks = new List<int>();
+                List<int> bids = new List<int>();
+                while (!sr.EndOfStream)
+                {
+                    line = sr.ReadLine();
+                    hands.Add(line.Substring(0, line.IndexOf(' ')));
+                    bids.Add(int.Parse(line.Substring(line.IndexOf(' '))));
+                }
+                ranks = Ranks(hands);
+                for (int i = 0; i < bids.Count; i++)
+                {
+
+                    total += ranks[i] * bids[i];
+                }
+                Console.WriteLine(total);
+            }
+            Console.ReadLine();
+        }
+    }
+}
