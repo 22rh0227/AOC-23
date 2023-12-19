@@ -1,0 +1,7 @@
+C:\Users\presetup\OneDrive\Documents\Visual Studio 2022\AOC 23\day 18\bin\Debug\day 18.exe.config
+C:\Users\presetup\OneDrive\Documents\Visual Studio 2022\AOC 23\day 18\bin\Debug\day 18.exe
+C:\Users\presetup\OneDrive\Documents\Visual Studio 2022\AOC 23\day 18\bin\Debug\day 18.pdb
+C:\Users\presetup\OneDrive\Documents\Visual Studio 2022\AOC 23\day 18\obj\Debug\day 18.csproj.AssemblyReference.cache
+C:\Users\presetup\OneDrive\Documents\Visual Studio 2022\AOC 23\day 18\obj\Debug\day 18.csproj.CoreCompileInputs.cache
+C:\Users\presetup\OneDrive\Documents\Visual Studio 2022\AOC 23\day 18\obj\Debug\day 18.exe
+C:\Users\presetup\OneDrive\Documents\Visual Studio 2022\AOC 23\day 18\obj\Debug\day 18.pdb
